@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Mapa developerských zámerov v Bratislave z registra posudzovania vplyvov na životné prostredie.">
+<title>Zámery Bratislavy</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.css">
+<link rel="stylesheet" href="../spolocne/tuba.css?v=20261012w">
+<!-- ?v= sa mení pri každej zmene, inak prehliadač podá starú verziu -->
+<link rel="stylesheet" href="ui.css?v=20261012w">
+</head>
+<body>
+
+<div class="lista">
+  <div class="znacka">
+    <img class="logo-mib" src="../spolocne/logo-mib.svg" alt="MIB">
+    <span class="kto">Metropolitný<br>inštitút<br>Bratislavy</span>
+  </div>
+  <h1>Zámery<span class="l"></span>Bratislavy</h1>
+  <span class="pod">Register EIA · úradné tabule · redakcia</span>
+  <nav>
+    <a href="../redakcia/">Doplniť polohy a obrázky</a>
+    <a href="../tok-dat/">Tok dát</a>
+  </nav>
+  <button class="lupatko" id="tl-hladaj" title="Hľadať">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+  </button>
+</div>
+
+<div class="plocha" id="plocha">
+  <div id="map"></div>
+
+  <div class="ovladanie" id="ovladanie">
+   <button class="zbal" id="tl-zbal" title="Skryť alebo ukázať panel" aria-label="Skryť alebo ukázať panel" aria-expanded="true">
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+   </button>
+   <div class="ovl-vnutro">
+    <div class="hladanie">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="Hľadať… napr. byty v Petržalke povolené od 2024">
+    </div>
+    <!-- čo z otázky mapa pochopila ako filter -->
+    <div class="rozumiem" id="rozumiem" hidden></div>
+
+    <div class="cisla">
+      <div class="velke"><span id="c-spolu">—</span></div>
+      <div class="r"><b id="c-vykresy">—</b> s výkresmi</div>
+      <div class="r"><b id="c-poloha">—</b> s presnou polohou</div>
+      <div class="r"><b id="c-obrazky">—</b> s obrázkami</div>
+    </div>
+    <div class="postup" id="postup"></div>
+
+    <div class="sk novinky" id="novinky"></div>
+
+    <div id="blok-aktivne" hidden>
+      <div class="hl-filtre">
+        <p class="st">AKTÍVNE FILTRE <span class="n" id="pocet-filtrov" hidden>0</span></p>
+        <button class="vsetky" id="vymaz">Vymazať všetko</button>
+      </div>
+      <div class="chipy" id="aktivne" style="margin-top:8px"></div>
+    </div>
+
+    <!-- filtre sedia priamo v paneli, nie v zásuvke -->
+    <div class="sk"><h4>FÁZA</h4><div class="prep" id="f-fazy"></div></div>
+
+    <div class="sk">
+      <h4>ÚČEL STAVBY</h4>
+      <div class="kat" id="kategorie"></div>
+      <button class="vsetky" id="vsetky-kat">Zobraziť všetky kategórie →</button>
+    </div>
+
+    <div class="sk"><h4>MESTSKÁ ČASŤ</h4>
+      <select id="f-mc"><option value="">Všetky mestské časti</option></select></div>
+    <div class="sk"><h4>DEVELOPERSKÁ SKUPINA</h4>
+      <select id="f-sk"><option value="">Všetky skupiny</option></select></div>
+    <div class="sk"><h4>PODKLADY</h4>
+      <select id="f-pl"><option value="">Všetky zámery</option>
+        <option value="1">Len s výkresmi</option>
+        <option value="2">Len s obrázkami</option>
+        <option value="3">Len s presnou polohou</option></select></div>
+   </div>
+  </div>
+
+  <div class="spodok">
+    <button class="vrstvy-tl" id="tl-vrstvy">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>
+      Vrstvy
+    </button>
+    <div class="legenda" id="legenda"></div>
+    <div class="legenda pridavna" id="legenda-mhd" hidden>
+      <span class="nadpis">MHD</span>
+      <div class="r"><span class="ciara" style="background:#000"></span>električka</div>
+      <div class="r"><span class="ciara" style="background:#F3716D"></span>trolejbus</div>
+      <div class="r"><span class="ciara" style="background:#A5A5A1"></span>autobus</div>
+    </div>
+    <div class="legenda pridavna" id="legenda-tabule" hidden>
+      <div class="r" title="Povolená stavba z úradnej tabule mestskej časti — v registri EIA nie je"><span class="t tabula"></span>vyhláška úradu · mimo EIA</div>
+    </div>
+    <div class="legenda pridavna" id="legenda-osm" hidden>
+      <div class="r" title="Stavenisko zakreslené v OpenStreetMap — v registri EIA nie je"><span class="t osm"></span>stavenisko OSM · mimo EIA</div>
+    </div>
+    <div class="legenda pridavna" id="legenda-lin" hidden>
+      <div class="r" title="Bod je miesto konania, nie trasa"><span class="t prst"></span>doprava a infraštruktúra</div>
+    </div>
+    <div class="legenda pridavna" id="legenda-vyska" hidden>
+      <span class="nadpis">POVOLENÁ VÝŠKA</span>
+      <div class="r"><span class="plocha" style="background:#D9D9D6"></span>11 m</div>
+      <div class="r"><span class="plocha" style="background:#B4B4B0"></span>16 m</div>
+      <div class="r"><span class="plocha" style="background:#8A8A86"></span>21 m</div>
+      <div class="r"><span class="plocha" style="background:#F3B0AE"></span>30 m</div>
+      <div class="r"><span class="plocha" style="background:#F3716D"></span>46 m</div>
+    </div>
+    <div class="legenda pridavna" id="legenda-3d" hidden>
+      <span class="nadpis">VÝŠKA BUDOV</span>
+      <div class="r"><span class="ciara" style="background:#D9D9D6"></span>do 12 m</div>
+      <div class="r"><span class="ciara" style="background:#A5A5A1"></span>25 m</div>
+      <div class="r"><span class="ciara" style="background:#55555A"></span>45 m</div>
+      <div class="r"><span class="ciara" style="background:#F3716D"></span>70 m a viac</div>
+    </div>
+  </div>
+
+  <div class="pop" id="pop-vrstvy">
+    <div>
+      <h4>MAPA</h4>
+      <label><input type="radio" name="pod" value="mapa" checked> Mapa farebná</label>
+      <label><input type="radio" name="pod" value="tlmena"> Mapa tlmená</label>
+      <label><input type="radio" name="pod" value="orto"> Ortofoto</label>
+      <label><input type="radio" name="pod" value="ziadny"> Bez podkladu</label>
+    </div>
+    <div>
+      <h4>FARBIŤ BODY PODĽA</h4>
+      <label><input type="radio" name="farby" value="faza" checked> Fázy povoľovania</label>
+      <label><input type="radio" name="farby" value="typ"> Účelu stavby</label>
+    </div>
+    <div>
+      <h4>ZOBRAZIŤ AKO</h4>
+      <label><input type="radio" name="zobraz" value="body" checked> Body a zhluky</label>
+      <label><input type="radio" name="zobraz" value="teplo"> Teplotnú mapu hustoty</label>
+    </div>
+    <div>
+      <h4>STAVBY</h4>
+      <label><input type="checkbox" id="v-liniove"> Doprava a infraštruktúra <span id="stav-lin" style="color:var(--tx3)"></span></label>
+      <label><input type="checkbox" id="v-osm"> Staveniská z OpenStreetMap <span id="stav-osm" style="color:var(--tx3)"></span></label>
+      <label><input type="checkbox" id="v-tabule"> Vyhlášky stavebných úradov <span id="stav-tabule" style="color:var(--tx3)"></span></label>
+      <label><input type="checkbox" id="v-komunita" checked> Komunitné body <span id="kom-pocet" style="color:var(--tx3)"></span></label>
+    </div>
+    <div>
+      <h4>ÚZEMNÝ PLÁN</h4>
+      <label><input type="checkbox" id="v-vyska"> Výšková regulácia <span id="stav-vyska" style="color:var(--tx3)"></span></label>
+      <label><input type="checkbox" id="v-upn"> Žiadosti o zmenu ÚPN <span id="stav-upn" style="color:var(--tx3)"></span></label>
+    </div>
+    <div>
+      <h4>INFORMÁCIE</h4>
+      <label><input type="checkbox" id="v-ulice" checked> Názvy ulíc</label>
+      <label><input type="checkbox" id="v-mc" checked> Názvy mestských častí</label>
+      <label><input type="checkbox" id="v-hranice" checked> Hranice mestských častí</label>
+      <label><input type="checkbox" id="v-mhd"> Linky MHD <span id="stav-mhd" style="color:var(--tx3)"></span></label>
+      <label><input type="checkbox" id="v-3d"> 3D budovy <span id="stav-3d" style="color:var(--tx3)"></span></label>
+      <label><input type="checkbox" id="v-stromy" checked> Stromy v správe mesta <span id="stav-stromy" style="color:var(--tx3)"></span></label>
+      <label><input type="checkbox" id="v-nazvy" checked> Názvy zámerov</label>
+    </div>
+    <!-- vysvetlivky boli dlhý blok textu — teraz sú zbalené a drobné -->
+    <details class="vysvetlivky">
+      <summary>Vysvetlivky a ovládanie</summary>
+      <p>Pravý klik na mapu ponúkne, čo sa dá s miestom urobiť. Stlačené koliesko myši
+      alebo <b>Shift</b> + ťahanie otáča a nakláňa mapu.</p>
+      <p>3D budovy sú z modelu LOD1 2021 (91 539 budov) a sťahujú sa po dlaždiciach — najprv si priblíž mapu.
+      Linky MHD sú z OpenStreetMap: električka čierna, trolejbus červený, autobus sivý.</p>
+      <p>Výšková regulácia je z územnej štúdie výškového zónovania, žiadosti o zmenu ÚPN z geoportálu,
+      oboje k septembru 2026. Staveniská z OpenStreetMap sú stavby pod prahom EIA, zakreslené komunitou.</p>
+      <p>Úradné tabule sledujeme od 8. 9. 2026 pri <b>16 zo 17</b> mestských častí.
+      <b>Ružinov chýba</b> — jeho web neodpovedá, pri ružinovských zámeroch preto fáza „povolené“ chýbať môže.</p>
+    </details>
+  </div>
+
+  <div class="mapctrl">
+    <button class="sk pridat" id="tl-pridat" title="Pridať zámer na mapu">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/>
+        <path d="M12 7v6M9 10h6"/></svg>
+    </button>
+    <div class="sk">
+      <button id="tl-plus" title="Priblížiť">+</button>
+      <button id="tl-minus" title="Oddialiť">−</button>
+    </div>
+    <div class="sk kompas"><button id="tl-kompas" title="Otočiť na sever a zrovnať">
+      <svg id="ruzica" width="19" height="19" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><path d="M12 5.5l3 9-3-2.2-3 2.2 3-9z" fill="currentColor"/></svg>
+    </button></div>
+    <div class="sk"><button id="tl-domov" title="Celé mesto">⌖</button></div>
+  </div>
+
+  <div class="navod" id="navod">
+    <span id="navod-txt">Klikni na mapu tam, kde projekt stojí</span>
+    <button id="navod-zrus">Zrušiť</button>
+  </div>
+
+  <div class="ponuka" id="ponuka"></div>
+  <div class="odkaz-hlaska" id="hlaska"></div>
+
+  <div class="tahadlo-d" id="tahadlo-d" title="Potiahnutím zmeníš šírku karty, dvojklikom vrátiš pôvodnú"></div>
+  <aside class="detail" id="detail"></aside>
+</div>
+
+
+<div class="lupa" id="lupa">
+  <button class="zavri" onclick="zavriLupu()">×</button>
+  <img id="lupa-obr" alt="">
+  <div class="popis" id="lupa-popis"></div>
+  <div class="ovl">
+    <button class="sip" id="lupa-vlavo">‹</button>
+    <a class="tl" id="lupa-original" target="_blank" rel="noopener">Otvoriť originál</a>
+    <button class="sip" id="lupa-vpravo">›</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.js"></script>
+<script src="app.js?v=20261012w"></script>
+<script>
+/* Panel (hľadanie, filtre, kategórie) je prilepený na ľavý okraj a zbaľuje sa
+   úchytkou na svojej hrane; von ostane len tá úchytka. Stav si prehliadač pamätá.
+   Trieda na <body> posúva spodnú lištu a ponuku Vrstiev. */
+(()=>{
+  const p=document.getElementById('ovladanie'), zb=document.getElementById('tl-zbal');
+  const nastav=otvor=>{
+    p.classList.toggle('skryty',!otvor);
+    document.body.classList.toggle('panel-zbaleny',!otvor);
+    zb.setAttribute('aria-expanded',otvor);
+    zb.title=otvor?'Skryť panel':'Ukázať panel';
+    try{ localStorage.setItem('zb-panel',otvor?'1':'0'); }catch(e){}
+  };
+  let stav=true; try{ stav=localStorage.getItem('zb-panel')!=='0'; }catch(e){}
+  if(!stav){ p.classList.add('bez-animacie'); nastav(false); requestAnimationFrame(()=>requestAnimationFrame(()=>p.classList.remove('bez-animacie'))); }
+  zb.addEventListener('click',()=>nastav(p.classList.contains('skryty')));
+})();
+</script>
+<script src="../spolocne/tuba.js?v=20261012w" defer></script>
+</body>
+</html>

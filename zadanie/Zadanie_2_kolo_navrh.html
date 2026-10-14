@@ -1,0 +1,115 @@
+<title>Zadanie pre programátora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+:root{--paper:#f7f6f2;--ink:#1f2328;--ink-2:#555c66;--rule:#d8d6cf;--sheet:#edece6;--blue:#24507f;--blue-soft:#e2eaf4;--amber:#8a5a12;--amber-soft:#f6ebd4;--green:#1f6f4a;--green-soft:#e1efe6;
+--serif:"Source Serif 4",Georgia,serif;--sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Source Code Pro",ui-monospace,Consolas,monospace;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#171a1e;--ink:#e8e6e0;--ink-2:#aeb4bc;--rule:#343a42;--sheet:#1f242a;--blue:#8db4e6;--blue-soft:#1b2a3c;--amber:#e3b46a;--amber-soft:#3a2d14;--green:#7fc9a0;--green-soft:#17302a;}}
+:root[data-theme="dark"]{--paper:#171a1e;--ink:#e8e6e0;--ink-2:#aeb4bc;--rule:#343a42;--sheet:#1f242a;--blue:#8db4e6;--blue-soft:#1b2a3c;--amber:#e3b46a;--amber-soft:#3a2d14;--green:#7fc9a0;--green-soft:#17302a;}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;padding-inline:clamp(16px,4vw,40px);padding-block:32px 72px;}
+main{max-width:900px;margin-inline:auto;}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15;text-wrap:balance;margin:0;}
+h1{font-size:clamp(28px,4.5vw,40px);} h2{font-size:clamp(21px,3vw,26px);margin-block:40px 12px;padding-top:14px;border-top:2px solid var(--ink);} h3{font-size:18px;margin-block:18px 6px;}
+p{max-width:70ch;margin:0 0 12px;} .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;}
+.lead{font-size:18px;color:var(--ink-2);max-width:66ch;margin-top:10px;}
+.fakty{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:22px;}
+.fakty>div{background:var(--sheet);padding:12px 14px;} .fakty .l{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);} .fakty .v{font-family:var(--serif);font-size:22px;font-weight:600;margin-top:3px;line-height:1.15;}
+.tbl{overflow-x:auto;border:1px solid var(--rule);margin-top:12px;} table{border-collapse:collapse;width:100%;min-width:640px;font-size:15px;}
+th,td{padding:9px 12px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top;} th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:500;background:var(--sheet);}
+td.n{font-family:var(--mono);text-align:right;white-space:nowrap;}
+.note{border-left:3px solid var(--blue);background:var(--blue-soft);padding:12px 16px;margin:16px 0;max-width:76ch;} .note.warn{border-left-color:var(--amber);background:var(--amber-soft);} .note.ok{border-left-color:var(--green);background:var(--green-soft);} .note p{margin:0;max-width:none;}
+ol,ul{padding-left:22px;max-width:74ch;} li{margin-bottom:7px;}
+code{font-family:var(--mono);font-size:.92em;background:var(--sheet);padding:1px 5px;border-radius:3px;}
+pre{font-family:var(--mono);font-size:13.5px;background:var(--sheet);border:1px solid var(--rule);padding:12px 14px;overflow-x:auto;line-height:1.5;}
+.var{border:1px solid var(--rule);background:var(--sheet);padding:14px 18px;margin-top:12px;} .var h3{margin-top:0;}
+.foot{margin-top:44px;font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:12px;}
+</style>
+<main>
+<div class="eyebrow">MIB · výberové konanie · Full-stack / Back-end programátor pre dáta a interaktívne technológie · 2. kolo</div>
+<h1>Praktické zadanie: mapa zámerov na dotykovej obrazovke</h1>
+<p class="lead">Malá, ale úplná vec: z verejných dát o stavebných zámeroch v Bratislave postavíte back-end, ktorý ich sprístupní, a front-end, ktorý ich ukáže na veľkej obrazovke tak, aby si ich vedel prezrieť človek na výstave bez návodu. Presne to, čo budete robiť na projekte — len v malom.</p>
+
+<div class="fakty">
+  <div><div class="l">čas</div><div class="v">6–8 h práce</div></div>
+  <div><div class="l">termín</div><div class="v">7 dní od zaslania</div></div>
+  <div><div class="l">odovzdanie</div><div class="v">GitHub repo + README</div></div>
+  <div><div class="l">jazyk back-endu</div><div class="v">Python</div></div>
+  <div><div class="l">posúdenie</div><div class="v">15 min + 30 min rozhovor</div></div>
+</div>
+
+<h2>1. Dáta, s ktorými pracujete</h2>
+<p>Všetko je verejné, nič nemusíte vymýšľať ani pýtať.</p>
+<div class="tbl"><table>
+<thead><tr><th>Zdroj</th><th>Čo to je</th><th>Formát</th></tr></thead>
+<tbody>
+<tr><td><a href="https://samuelzenko.github.io/kto-stoji-za-projektom/mapa-zamerov/zamery.geojson" target="_blank" rel="noopener">zamery.geojson</a></td><td>988 stavebných zámerov v Bratislave z registra EIA: názov, navrhovateľ, IČO, mestská časť, fáza konania, poloha (bod), presnosť polohy, odkaz na spis</td><td>GeoJSON, ~2 MB</td></tr>
+<tr><td><a href="https://geoportal.bratislava.sk/hSite/rest/services/osm/Cesty_a_doprava_OSM/MapServer" target="_blank" rel="noopener">Geoportál BA — ulice (OSM)</a></td><td>REST služba ArcGIS: pomenované ulice, polygóny mestských častí, budovy</td><td>ArcGIS REST, JSON / GeoJSON</td></tr>
+<tr><td><a href="https://www.enviroportal.sk/eia/" target="_blank" rel="noopener">enviroportal.sk</a></td><td>spisy EIA, odkiaľ zámery pochádzajú (len na kontext, sťahovať nemusíte)</td><td>web</td></tr>
+</tbody></table></div>
+<div class="note"><p>Dáta sú reálne, teda nedokonalé: 464 zámerov má polohu len približnú (ťažisko mestskej časti), názvy sú v rôznych formách, niektoré IČO chýbajú. Ako sa s tým vysporiadate, je súčasť hodnotenia.</p></div>
+
+<h2>2. Čo má vzniknúť</h2>
+<h3>A. Back-end (Python)</h3>
+<ol>
+<li>Načítajte <code>zamery.geojson</code> a sprístupnite ho cez HTTP API (FastAPI, Flask, Django — na výbere nezáleží).</li>
+<li>Endpoint <code>GET /zamery</code> s filtrovaním aspoň podľa <b>mestskej časti</b>, <b>fázy konania</b> a <b>roku</b>, a s možnosťou vrátiť len zámery s presnou polohou.</li>
+<li>Endpoint <code>GET /zamery/{id}</code> s detailom.</li>
+<li>Endpoint <code>GET /statistiky</code>: počet zámerov na mestskú časť a na rok — teda agregácia, ktorá sa dá rovno vykresliť.</li>
+<li>Jedna <b>dátová úloha navyše</b>: pre zámery s približnou polohou skúste polohu spresniť. Napríklad podľa názvu ulice v názve zámeru proti vrstve ulíc z geoportálu, alebo podľa názvu projektu proti OSM. Nemusí to vyjsť pri všetkých — zaujíma nás postup, overenie výsledku a to, ako označíte, čo je spresnené a odkiaľ.</li>
+</ol>
+<h3>B. Front-end</h3>
+<ol>
+<li>Webová stránka s mapou (Leaflet, MapLibre, OpenLayers, Mapbox — podľa vás), ktorá ťahá dáta z vášho API.</li>
+<li>Navrhnutá pre <b>dotykovú obrazovku 1920 × 1080 na výšku alebo na šírku</b> (zvoľte a zdôvodnite): veľké ovládacie prvky, čitateľné z dvoch metrov, žiadne hover-only interakcie, žiadny scroll stránky.</li>
+<li>Filtrovanie podľa mestskej časti a fázy; po ťuknutí na bod karta zámeru s odkazom na spis.</li>
+<li>Jedna vizualizácia zo <code>/statistiky</code> (stĺpce, časová os, čokoľvek), ktorá odpovedá na otázku <i>„kde a kedy sa v Bratislave najviac stavia"</i>.</li>
+<li>Rozlíšenie presná / približná poloha musí byť na mape viditeľné — návštevník nesmie dostať dojem, že bod v strede Ružinova je skutočné miesto stavby.</li>
+</ol>
+<h3>C. README</h3>
+<ul>
+<li>ako to spustiť jedným-dvoma príkazmi (ideálne <code>docker compose up</code> alebo <code>pip install</code> + <code>python …</code>),</li>
+<li>čo ste stihli a čo nie, a čo by ste robili ďalej,</li>
+<li>ako ste spresňovali polohy, koľko sa podarilo a ako ste to overili,</li>
+<li>ak ste použili AI nástroje, napíšte na čo — nie je to mínus, nepomenovaná závislosť na nich je.</li>
+</ul>
+
+<h2>3. Čo hodnotíme a ako</h2>
+<p>Hodnotenie trvá 15 minút na kandidáta: spustíme README postupom, otvoríme stránku na dotykovom monitore, prejdeme kód. Body nie sú tajné:</p>
+<div class="tbl"><table>
+<thead><tr><th>Oblasť</th><th class="n">body</th><th>Čo sa pozerá</th></tr></thead>
+<tbody>
+<tr><td>Spustí sa to</td><td class="n">15</td><td>podľa README, bez ručného zásahu; závislosti pripnuté</td></tr>
+<tr><td>Back-end a dáta</td><td class="n">25</td><td>čisté API, rozumné filtre, agregácia; ako sa zaobchádza s chýbajúcimi a špinavými hodnotami</td></tr>
+<tr><td>Spresnenie polohy</td><td class="n">15</td><td>postup, overenie, poctivé označenie zdroja a neistoty — nie počet trafených bodov</td></tr>
+<tr><td>Front-end na dotykovej obrazovke</td><td class="n">25</td><td>použiteľné bez návodu z 2 m, presná vs. približná poloha jasná, jedna vizualizácia, ktorá niečo hovorí</td></tr>
+<tr><td>Kód a README</td><td class="n">15</td><td>štruktúra, názvy, žiadne mŕtve časti; README hovorí pravdu o tom, čo je a nie je hotové</td></tr>
+<tr><td>Rozhovor</td><td class="n">5</td><td>vie vysvetliť rozhodnutia a čo by zmenil, keby mal týždeň</td></tr>
+</tbody></table></div>
+<div class="note warn"><p><b>Čo nehodnotíme:</b> grafickú krásu (na to máme dizajnéra), počet features navyše, ani to, či ste použili konkrétny framework. Hotová menšia vec je viac než nedokončená veľká.</p></div>
+
+<h2>4. Rozhovor po zadaní (30 min)</h2>
+<p>Otázky vychádzajú z toho, čo odovzdáte, plus tri, ktoré dostane každý:</p>
+<ol>
+<li>Tá istá mapa má bežať aj ako <b>projekcia na fyzický model mesta</b> — obraz 3840 × 1080 cez dva panely, bez dotyku, ovládaná z tabletu. Čo by ste na architektúre zmenili?</li>
+<li>Zámery sa menia každý týždeň (nové spisy v registri). Ako by ste riešili pravidelnú aktualizáciu, aby ručne overené polohy neprepísal automat?</li>
+<li>Dáta z IoT senzorov (napr. teplota, hluk, 1 záznam za minútu, desiatky senzorov) majú pribudnúť ako ďalšia vrstva. Kde by ste ich držali a ako by ste ich dostali na mapu?</li>
+</ol>
+
+<h2>5. Alternatívne zadanie pre kandidátov so silnejším zameraním na projekciu</h2>
+<div class="var">
+<h3>Variant B — scéna pre spodnú projekciu</h3>
+<p>Ak kandidát v 1. kole ukázal skúsenosť s multimédiami, môže namiesto A+B riešiť toto: z tých istých dát vyrenderujte <b>animovanú scénu 3840 × 1080</b> (web, Canvas/WebGL, alebo video), ktorá na mape bulváru Mlynské nivy ukáže postup výstavby v čase — rok po roku, zámery sa rozsvecujú podľa fázy. Scéna má bežať v slučke, mať tlačidlo pauzy ovládateľné z druhého zariadenia (stačí jednoduché WebSocket/HTTP spojenie) a mať ostré 1 px čiary bez rozmazania na spoji dvoch panelov. Back-end časť (API + štatistiky) ostáva.</p>
+</div>
+
+<h2>6. Pre nás — poznámky k organizácii</h2>
+<ul>
+<li>Zadanie posielame len kandidátom po 1. kole (ukážka práce + CV), max. 4–5 ľuďom.</li>
+<li>Dáta sú verejné a stabilné (GitHub Pages), takže všetci dostanú to isté a nič netreba pripravovať.</li>
+<li>Posudzuje dvojica: jeden z projektu (funkčnosť, dáta), jeden z GIS/IT magistrátu (kód, prevádzka). Body si zapíšu nezávisle, potom porovnajú.</li>
+<li>Kandidát dostane spätnú väzbu aj pri neúspechu — 5 viet, čo bolo dobré a čo rozhodlo.</li>
+<li>Pred odoslaním si zadanie sami spravte v rámci časového limitu, alebo ho dajte niekomu z tímu — ak to nejde stihnúť za 8 h, treba ubrať.</li>
+</ul>
+<div class="note ok"><p><b>Prečo práve toto zadanie:</b> kopíruje skutočnú prácu na projekte (verejné priestorové dáta → API → rozhranie pre výstavu), dá sa posúdiť za 15 minút, nevyžaduje od kandidáta žiadny prístup do mestských systémov a odhalí presne tie tri veci, ktoré inzerát žiada ako podmienku: Python, API/dáta, front-end pre interaktívne zobrazenie.</p></div>
+
+<div class="foot">Návrh zadania pre 2. kolo výberového konania, MIB, 14. 10. 2026. Vychádza z inzerátu „Full-stack / Back-end programátor pre dáta a interaktívne technológie“ (verzia 31. 7. 2026) a z inzerátu dizajnéra (11. 6. 2026). Dátový zdroj: mapa zámerov Bratislavy, verejný GeoJSON z registra EIA.</div>
+</main>
